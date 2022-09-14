@@ -7,7 +7,9 @@ export class InterviewStatusUpdatedHandler
 {
   async handle(event: InterviewStatusUpdatedEvent): Promise<void> {
     console.log(
-      `Interview ${event.interviewId} status updated: ${event.status}`,
+      `Interview ${event.interviewId ?? ''} status ${
+        event.candidateName ? `for ${event.candidateName}` : ''
+      } updated: ${event.status}`,
     );
   }
 }

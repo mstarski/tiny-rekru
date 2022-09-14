@@ -5,6 +5,7 @@ import { UpdateInterviewStatusCommand } from '../use-cases/commands/update-inter
 
 interface StatusCliOptions {
   id: string;
+  name: string;
 }
 
 @Command({
@@ -23,19 +24,31 @@ export class StatusCli extends CommandRunner {
 
   async run(argv: string[], options?: StatusCliOptions): Promise<void> {
     const status = this.parseInterviewStatus(argv[0]);
-    const { id: inteviewId } = options;
+    const { id: inteviewId, name: candidateName } = options;
+
+    if (inteviewId && candidateName) {
+      throw new Error(`Specify only one from id and candidate's name`);
+    }
 
     return this.commandBus.execute(
-      new UpdateInterviewStatusCommand(inteviewId, status),
+      new UpdateInterviewStatusCommand(inteviewId, candidateName, status),
     );
   }
 
   @Option({
     flags: '--id <id>',
-    description: `Interview's id (can be shortened to unique prefix).`,
+    description: `Interview ID`,
   })
   parseInterviewId(id: string) {
     return id;
+  }
+
+  @Option({
+    flags: '-n --name <name>',
+    description: `Candidate's name`,
+  })
+  parseCandidateName(name: string) {
+    return name;
   }
 
   private parseInterviewStatus(status: string): InterviewStatus {

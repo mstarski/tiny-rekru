@@ -6,9 +6,8 @@ import { InterviewMemoryRepository } from '../data/memory/interview-memory.repos
 import { InterviewSqlRepository } from '../data/sql/interview-sql.repository';
 import { CandidateSqlRepository } from '../data/sql/candidate-sql.repository';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { CandidateEntity } from '../data/sql/entities/candidate.entity';
-import { InterviewEntity } from '../data/sql/entities/interview.entity';
 import SQLiteConfig from '../config/sqlite-config';
+import { Entities } from '../data/sql/entities';
 
 export interface RepositoriesModuleConfig {
   repository: RepoType;
@@ -38,7 +37,7 @@ export class RepositoriesModule {
       case RepoType.SQLite:
         imports = [
           MikroOrmModule.forRoot(SQLiteConfig),
-          MikroOrmModule.forFeature([InterviewEntity, CandidateEntity]),
+          MikroOrmModule.forFeature(Entities),
         ];
 
         repoImplementations = [

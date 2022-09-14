@@ -2,8 +2,7 @@ import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { ScheduleInterviewCommand } from './schedule-interview.command';
 import { Scheduler } from '../../../domain/scheduler';
 import { MikroORM } from '@mikro-orm/core';
-import { Interview } from '../../../domain/interview';
-import { Repository } from '../../../data/repository';
+import { InterviewRepository } from '../../../data/interview.repository';
 import { InterviewRepoImpl } from '../../../tokens';
 import { Inject } from '@nestjs/common';
 
@@ -16,7 +15,7 @@ export class ScheduleInterviewHandler
     private readonly orm: MikroORM,
 
     @Inject(InterviewRepoImpl)
-    private readonly interviewRepo: Repository<Interview>,
+    private readonly interviewRepo: InterviewRepository,
   ) {}
 
   async execute(command: ScheduleInterviewCommand): Promise<void> {

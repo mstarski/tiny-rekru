@@ -1,7 +1,8 @@
-import { Repository } from '../repository';
 import { Candidate } from '../../domain/candidate';
+import { CandidateRepository } from '../candidate.repository';
+import { NotImplementedException } from '@nestjs/common';
 
-export class CandidateMemoryRepository implements Repository<Candidate> {
+export class CandidateMemoryRepository implements CandidateRepository {
   private candidates: Candidate[] = [];
 
   async create(model: Candidate) {
@@ -10,6 +11,6 @@ export class CandidateMemoryRepository implements Repository<Candidate> {
   }
 
   findById(id: string): Promise<Candidate> {
-    return Promise.resolve(undefined);
+    throw new NotImplementedException();
   }
 }

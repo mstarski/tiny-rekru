@@ -2,10 +2,9 @@ import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { UpdateInterviewStatusCommand } from './update-interview-status.command';
 import { MikroORM } from '@mikro-orm/core';
 import { InterviewRepoImpl } from '../../../tokens';
-import { Repository } from '../../../data/repository';
-import { Interview } from '../../../domain/interview';
+import { InterviewRepository } from '../../../data/interview.repository';
 import { Inject } from '@nestjs/common';
-import { Manager } from '../../../cli/manager';
+import { Manager } from '../../../domain/manager';
 
 @CommandHandler(UpdateInterviewStatusCommand)
 export class UpdateInterviewStatusHandler
@@ -16,17 +15,17 @@ export class UpdateInterviewStatusHandler
     private readonly orm: MikroORM,
 
     @Inject(InterviewRepoImpl)
-    private readonly interviewRepo: Repository<Interview>,
+    private readonly interviewRepo: InterviewRepository,
   ) {}
 
   async execute(command: UpdateInterviewStatusCommand): Promise<void> {
-    const { interviewId, status } = command;
+    const { interviewId, candidateName, status } = command;
 
     const manager = this.publisher.mergeObjectContext(
       new Manager(this.orm, this.interviewRepo),
     );
 
-    await manager.updateInterviewStatus(interviewId, status);
+    await manager.updateInterviewStatus(interviewId, candidateName, status);
     manager.commit();
   }
 }

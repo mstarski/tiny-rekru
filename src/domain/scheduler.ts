@@ -5,11 +5,12 @@ import { CreateCandidateDto } from '../dto/create-candidate.dto';
 import { InterviewScheduledEvent } from '../events/interview-scheduled/interview-scheduled.event';
 import * as dayjs from 'dayjs';
 import { MikroORM, UseRequestContext } from '@mikro-orm/core';
+import { InterviewRepository } from '../data/interview.repository';
 
 export class Scheduler extends AggregateRoot {
   constructor(
     private readonly orm: MikroORM,
-    private readonly interviewRepo: any,
+    private readonly interviewRepo: InterviewRepository,
   ) {
     super();
   }

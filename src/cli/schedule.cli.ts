@@ -54,12 +54,9 @@ export class ScheduleCli extends CommandRunner {
 
   @Option({
     flags: '--date <date>',
-    description: `Interview date in YYYY-MM-DD.HH:MM format`,
+    description: `Interview date in DD-MM-YYYY HH:mm format`,
   })
   parseInterviewDate(rawDate: string): dayjs.Dayjs {
-    const [date, hour] = rawDate.split('.');
-    const utcFormat = `${date} ${hour}:00`;
-
-    return dayjs(utcFormat);
+    return dayjs(rawDate, 'DD-MM-YYYY HH:mm');
   }
 }

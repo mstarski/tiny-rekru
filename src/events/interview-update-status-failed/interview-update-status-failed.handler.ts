@@ -7,7 +7,9 @@ export class InterviewUpdateStatusFailedHandler
 {
   async handle(event: InterviewUpdateStatusFailedEvent): Promise<void> {
     console.error(
-      `Updating status of interview ${event.interviewId} failed!\nReason: ${event.reason}`,
+      `Updating status of interview ${event.interviewId ?? ''}${
+        event.candidateName ? `for ${event.candidateName}` : ''
+      } failed!\nReason: ${event.reason}`,
     );
   }
 }

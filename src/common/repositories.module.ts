@@ -3,8 +3,12 @@ import { RepoType } from '../config/config.types';
 import { CandidateRepoImpl, InterviewRepoImpl } from '../tokens';
 import { CandidateMemoryRepository } from '../data/memory/candidate-memory.repository';
 import { InterviewMemoryRepository } from '../data/memory/interview-memory.repository';
-import { InterviewRepository } from '../data/persistance/interview.repository';
-import { CandidateRepository } from '../data/persistance/candidate.repository';
+import { InterviewSqlRepository } from '../data/sql/interview-sql.repository';
+import { CandidateSqlRepository } from '../data/sql/candidate-sql.repository';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { CandidateEntity } from '../data/sql/entities/candidate.entity';
+import { InterviewEntity } from '../data/sql/entities/interview.entity';
+import SQLiteConfig from '../config/sqlite-config';
 
 export interface RepositoriesModuleConfig {
   repository: RepoType;
@@ -15,6 +19,7 @@ export interface RepositoriesModuleConfig {
 export class RepositoriesModule {
   static forRoot(config: RepositoriesModuleConfig): DynamicModule {
     let repoImplementations: Provider[] = [];
+    let imports: DynamicModule[] = [];
 
     switch (config.repository) {
       case RepoType.Memory:
@@ -30,15 +35,20 @@ export class RepositoriesModule {
         ];
         break;
 
-      case RepoType.Persistance:
+      case RepoType.SQLite:
+        imports = [
+          MikroOrmModule.forRoot(SQLiteConfig),
+          MikroOrmModule.forFeature([InterviewEntity, CandidateEntity]),
+        ];
+
         repoImplementations = [
           {
             provide: CandidateRepoImpl,
-            useClass: CandidateRepository,
+            useClass: CandidateSqlRepository,
           },
           {
             provide: InterviewRepoImpl,
-            useClass: InterviewRepository,
+            useClass: InterviewSqlRepository,
           },
         ];
         break;
@@ -49,6 +59,7 @@ export class RepositoriesModule {
 
     return {
       module: RepositoriesModule,
+      imports: [...imports],
       providers: [...repoImplementations],
       exports: [...repoImplementations],
     };

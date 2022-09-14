@@ -1,8 +1,11 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { ScheduleInterviewCommand } from './schedule-interview.command';
 import { Scheduler } from '../../../domain/scheduler';
+import { MikroORM } from '@mikro-orm/core';
+import { Interview } from '../../../domain/interview';
+import { Repository } from '../../../data/repository';
+import { InterviewRepoImpl } from '../../../tokens';
 import { Inject } from '@nestjs/common';
-import { CandidateRepoImpl, InterviewRepoImpl } from '../../../tokens';
 
 @CommandHandler(ScheduleInterviewCommand)
 export class ScheduleInterviewHandler
@@ -10,15 +13,17 @@ export class ScheduleInterviewHandler
 {
   constructor(
     private readonly publisher: EventPublisher,
-    @Inject(CandidateRepoImpl) private readonly candidateRepo,
-    @Inject(InterviewRepoImpl) private readonly interviewRepo,
+    private readonly orm: MikroORM,
+
+    @Inject(InterviewRepoImpl)
+    private readonly interviewRepo: Repository<Interview>,
   ) {}
 
   async execute(command: ScheduleInterviewCommand): Promise<void> {
     const { candidateDto, date } = command;
 
     const scheduler = this.publisher.mergeObjectContext(
-      new Scheduler(this.candidateRepo, this.interviewRepo),
+      new Scheduler(this.orm, this.interviewRepo),
     );
 
     await scheduler.scheduleInterview(candidateDto, date);

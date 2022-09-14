@@ -1,4 +1,4 @@
 export enum RepoType {
   Memory = 'memory',
-  Persistance = 'persistance',
+  SQLite = 'sqlite',
 }

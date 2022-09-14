@@ -19,9 +19,15 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "cli": "node -r tsconfig-paths/register -r ts-node/register src/main.ts"
+    "cli": "node -r tsconfig-paths/register -r ts-node/register src/main.ts",
+    "mikro-orm": "mikro-orm"
   },
   "dependencies": {
+    "@mikro-orm/cli": "^5.4.2",
+    "@mikro-orm/core": "^5.4.2",
+    "@mikro-orm/nestjs": "^5.1.2",
+    "@mikro-orm/sql-highlighter": "^1.0.1",
+    "@mikro-orm/sqlite": "^5.4.2",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/cqrs": "^9.0.1",
@@ -70,5 +76,12 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": [
+      "./src/config/sqlite-config.ts",
+      "./dist/config/sqlite-config.js"
+    ]
   }
 }

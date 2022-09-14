@@ -1,6 +1,6 @@
 import { Command, CommandRunner, Option } from 'nest-commander';
 import * as dayjs from 'dayjs';
-import { CandidateDto } from '../dto/candidate.dto';
+import { CreateCandidateDto } from '../dto/create-candidate.dto';
 import { CommandBus } from '@nestjs/cqrs';
 import { ScheduleInterviewCommand } from '../use-cases/commands/schedule-interview/schedule-interview.command';
 
@@ -18,7 +18,7 @@ export class ScheduleCli extends CommandRunner {
   }
 
   async run(argv: string[], options?: InterviewCliOptions) {
-    const candidateDto = new CandidateDto({
+    const candidateDto = new CreateCandidateDto({
       name: options.name,
       age: options?.age,
       location: options?.location,

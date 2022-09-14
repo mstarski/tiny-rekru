@@ -6,7 +6,7 @@ import { RepoType } from './config/config.types';
 @Module({
   imports: [
     CliModule,
-    RepositoriesModule.forRoot({ repository: RepoType.Persistance }),
+    RepositoriesModule.forRoot({ repository: RepoType.SQLite }),
   ],
 })
 export class AppModule {}

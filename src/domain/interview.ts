@@ -1,19 +1,23 @@
+import { InterviewEntity } from '../data/sql/entities/interview.entity';
 import { Candidate } from './candidate';
 
 export class Interview {
-  private static counter = 0;
-
-  id: number;
-  candidate: Candidate;
+  id?: string;
   date: Date;
   status: InterviewStatus = InterviewStatus.Pending;
-  notes: string | null = null;
+  notes?: string | null = null;
+  candidate?: Candidate;
 
-  constructor(candidate, date) {
-    this.id = Interview.counter++;
+  constructor(props: Partial<Interview>) {
+    Object.assign(this, props);
+  }
 
-    this.candidate = candidate;
-    this.date = date;
+  toEntity(): InterviewEntity {
+    return new InterviewEntity({
+      date: this.date,
+      status: this.status,
+      notes: this.notes,
+    });
   }
 }
 
